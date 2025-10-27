@@ -5,6 +5,7 @@ import connectDB from './config/database.js';
 import authRoutes from './routes/authRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
+import { protect } from './middleware/authMiddleware.js';
 
 // Load environment variables
 dotenv.config();
@@ -17,14 +18,18 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
-  credentials: true
+  origin: '*',
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+
+
+
 app.use('/api/auth', authRoutes);
+
+app.use("/api", protect)
 app.use('/api/students', studentRoutes);
 
 // Health check route
