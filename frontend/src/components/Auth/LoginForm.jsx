@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
 
-const LoginForm = ({ onLogin, isLoading }) => {
+const LoginForm = ({ onLogin, isLoading, onSwitchToRegister }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -83,13 +83,19 @@ const LoginForm = ({ onLogin, isLoading }) => {
           </button>
         </form>
 
-        <div className="demo-credentials">
-          <p className="demo-title">Demo Credentials:</p>
-          <div className="credentials-list">
-            <p>📧 john@school.com / pass123</p>
-            <p>📧 jane@school.com / pass456</p>
-          </div>
+          <div className="auth-switch">
+          <p>Don’t have an account?{' '}
+            <button
+              type="button"
+              onClick={onSwitchToRegister}
+              className="link-button"
+            >
+              Register
+            </button>
+          </p>
         </div>
+
+
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import Toast from './components/Common/Toast';
 import { useAuth } from './hooks/useAuth';
 import { useStudents } from './hooks/useStudents';
 import { useToast } from './hooks/useToast';
+import RegistrationForm from './components/Auth/Register';
 import './App.css';
 
 function App() {
@@ -22,12 +23,24 @@ function App() {
   const [currentPage, setCurrentPage] = useState('overview');
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showRegister, setShowRegister] = useState(false); 
 
   const handleLogin = async (email, password) => {
     const result = await login(email, password);
     if (result.success) {
       showToast('Login successful!', 'success');
       setCurrentPage('overview');
+    } else {
+      showToast(result.error, 'error');
+    }
+    return result;
+  };
+
+    const handleRegister = async (data) => {
+    const result = await register(name, email, password);
+    if (result.success) {
+      showToast('Registration successful! You can now log in.', 'success');
+      setShowRegister(false); 
     } else {
       showToast(result.error, 'error');
     }
@@ -84,8 +97,20 @@ function App() {
     await fetchStudents();
   };
 
-  if (!isAuthenticated) {
-    return <LoginForm onLogin={handleLogin} isLoading={authLoading} />;
+   if (!isAuthenticated) {
+    return showRegister ? (
+      <RegistrationForm
+        onRegister={handleRegister}
+        isLoading={authLoading}
+        onSwitchToLogin={() => setShowRegister(false)} 
+      />
+    ) : (
+      <LoginForm
+        onLogin={handleLogin}
+        isLoading={authLoading}
+        onSwitchToRegister={() => setShowRegister(true)} 
+      />
+    );
   }
 
   return (
